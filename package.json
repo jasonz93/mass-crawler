@@ -1,5 +1,13 @@
 {
   "name": "mass-crawler",
+  "author": {
+    "name": "Zhang Sihao",
+    "url": "http://www.agarage.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jasonz93/mass-crawler"
+  },
   "version": "0.0.1",
   "scripts": {
     "test": "./node_modules/.bin/istanbul cover _mocha",
