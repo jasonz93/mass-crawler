@@ -107,13 +107,17 @@ describe('Crawler test', function () {
         (async () => {
             let session = new CrawlerSession();
             let middlewareStore = {
-                'FakeProxySelector': new FakeProxySelector('abc')
+                'FakeProxySelector': new FakeProxySelector('abc'),
+                'anotherProxySelector': new FakeProxySelector('def')
             }
+            middlewareStore.anotherProxySelector.setAlias('anotherProxySelector');
             session.addMiddleware(middlewareStore.FakeProxySelector);
+            session.addMiddleware(middlewareStore.anotherProxySelector);
             session.setAttribute('foo', 'bar');
             let json = session.toJSON();
             let newSession = CrawlerSession.fromJSON(json, middlewareStore);
             expect(newSession._middlewares[0]).to.deep.equal(middlewareStore.FakeProxySelector);
+            expect(newSession._middlewares[1]).to.deep.equal(middlewareStore.anotherProxySelector);
             expect(newSession.getAttribute('foo')).to.be.equal('bar');
         })().then(done).catch(done);
     });

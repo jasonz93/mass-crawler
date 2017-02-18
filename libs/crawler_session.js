@@ -33,7 +33,7 @@ class CrawlerSession {
         };
         for (let i in this._middlewares) {
             obj.middlewares.push({
-                name: this._middlewares[i].getName()
+                name: this._middlewares[i].getAlias()
             });
         }
         return obj;
