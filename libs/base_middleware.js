@@ -22,6 +22,10 @@ class BaseMiddleware {
     async buildRequestOptions(session) {
         return {};
     }
+
+    getName() {
+        throw new Error('Method not implemented.');
+    }
 }
 
 module.exports = BaseMiddleware;

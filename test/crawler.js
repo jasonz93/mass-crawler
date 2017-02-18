@@ -48,6 +48,10 @@ class FakeProxySelector extends BaseProxySelector {
     async select(session) {
         return this.proxy;
     }
+
+    getName() {
+        return 'FakeProxySelector';
+    }
 }
 
 describe('Crawler test', function () {
@@ -84,6 +88,7 @@ describe('Crawler test', function () {
     it('Test proxy selector', function (done) {
         (async () => {
             let session = new CrawlerSession();
+            let proxySelector = new FakeProxySelector();
             session.addMiddleware(new FakeProxySelector('xxx'));
             try {
                 let {response, data} = await session.request('http://www.baidu.com');
@@ -96,5 +101,20 @@ describe('Crawler test', function () {
             }
             done();
         })().catch(done);
+    });
+
+    it('Test serialize and deserialize', function (done) {
+        (async () => {
+            let session = new CrawlerSession();
+            let middlewareStore = {
+                'FakeProxySelector': new FakeProxySelector('abc')
+            }
+            session.addMiddleware(middlewareStore.FakeProxySelector);
+            session.setAttribute('foo', 'bar');
+            let json = session.toJSON();
+            let newSession = CrawlerSession.fromJSON(json, middlewareStore);
+            expect(newSession._middlewares[0]).to.deep.equal(middlewareStore.FakeProxySelector);
+            expect(newSession.getAttribute('foo')).to.be.equal('bar');
+        })().then(done).catch(done);
     });
 });
